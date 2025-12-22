@@ -1,141 +1,169 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Cari Rapor Siswa</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>E-RAPOR SMP RAUDLATUL MUSTHOFA</title>
 
-<!-- TailwindCSS CDN -->
-<script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
 
-<!-- Google Font: Plus Jakarta Sans -->
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-<style>
-  body {
-    font-family: "Plus Jakarta Sans", sans-serif;
-  }
-</style>
+    <script src="https://unpkg.com/lucide@latest"></script>
 
+    <style>
+        body {
+            font-family: "Plus Jakarta Sans", sans-serif;
+            background: radial-gradient(circle at top right, #f8fafc, #e2e8f0);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+    </style>
 </head>
-<body class="bg-gradient-to-b from-gray-50 to-gray-100 min-h-screen p-5">
+<body class="min-h-screen flex items-center justify-center p-6">
 
-<!-- CONTAINER -->
-<div class="max-w-lg mx-auto">
+<div class="max-w-md w-full">
+    
+    <div class="glass-card shadow-2xl rounded-[2rem] overflow-hidden border border-white">
+        
+        <div class="p-8 text-center bg-white">
+            <div class="flex justify-center mb-4">
+                <div class="w-24 h-24 bg-gray-50 rounded-full flex items-center justify-center p-2 shadow-inner border border-gray-100">
+                    <img src="https://i.postimg.cc/hjcmg0s6/logo-smp.png" alt="Logo Sekolah" class="w-full h-auto object-contain">
+                </div>
+            </div>
+            <h1 class="text-xs font-bold uppercase tracking-[0.2em] text-blue-600 mb-1">Sistem Informasi</h1>
+            <h2 class="text-2xl font-extrabold text-gray-800 leading-tight">E-RAPOR SMP <br>RAUDLATUL MUSTHOFA</h2>
+        </div>
 
-  <!-- TITLE -->
-  <h1 class="text-center text-3xl font-semibold text-gray-900 mb-8 tracking-tight">
-    Portal Rapor Digital
-  </h1>
+        <div class="p-8 pt-0">
+            <div class="relative group">
+                <label class="block mb-2 text-sm font-semibold text-gray-500 ml-1">Nomor Induk Siswa Nasional</label>
+                <div class="relative">
+                    <input
+                        id="nisn"
+                        type="text"
+                        placeholder="Masukkan NISN Siswa..."
+                        class="w-full px-5 py-4 rounded-2xl border-2 border-gray-100 bg-gray-50 focus:bg-white focus:ring-4 focus:ring-blue-100 focus:border-blue-500 outline-none transition-all duration-300 text-gray-800 font-medium placeholder-gray-400"
+                    />
+                </div>
+            </div>
 
-  <!-- SEARCH BOX CARD -->
-  <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200">
+            <button
+                onclick="search()"
+                class="w-full mt-6 bg-gray-900 text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-3 hover:bg-blue-600 shadow-lg shadow-gray-200 hover:shadow-blue-200 transition-all duration-300 transform active:scale-[0.98]"
+            >
+                <i data-lucide="search" class="w-5 h-5"></i>
+                Cari Rapor
+            </button>
 
-    <label class="block mb-2 text-gray-700 font-medium">Masukkan NISN</label>
-    <input
-      id="nisn"
-      type="text"
-      placeholder="Contoh: 0078457890"
-      class="w-full px-4 py-3 rounded-xl border border-gray-300 shadow-sm focus:ring-2 focus:ring-black outline-none mb-4 text-gray-800"
-    />
+            <div id="result" class="mt-8"></div>
+        </div>
 
-    <button
-      onclick="search()"
-      class="w-full bg-black text-white py-3 rounded-xl font-semibold flex items-center justify-center gap-2 hover:bg-gray-900 transition"
-    >
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
-        viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round"
-          d="m21 21-5.197-5.197M4.75 10.5a5.75 5.75 0 1 1 11.5 0 5.75 5.75 0 0 1-11.5 0Z" />
-      </svg>
-      Cari Rapor
-    </button>
-
-  </div>
-
-  <!-- RESULT -->
-  <div id="result" class="mt-6"></div>
-
+        <div class="p-6 bg-gray-50 text-center border-t border-gray-100">
+            <p class="text-xs text-gray-400 font-medium">© 2024 SMP Raudlatul Musthofa • Digital Portal</p>
+        </div>
+    </div>
 </div>
 
 <script>
 const API_URL = "https://script.google.com/macros/s/AKfycbx9_IzwspILFBdWL6YKG9vcco0Ay3bZE7iPaHx8lb0PCBfN6_JLx-WQHOPbu8Xzf3nBAg/exec";
 
 async function search() {
-  const nisn = document.getElementById("nisn").value.trim();
-  const resBox = document.getElementById("result");
+    const nisn = document.getElementById("nisn").value.trim();
+    const resBox = document.getElementById("result");
 
-  if (!nisn) {
-    resBox.innerHTML = `
-      <p class="text-center text-red-600 font-medium">
-        NISN tidak boleh kosong.
-      </p>`;
-    return;
-  }
-
-  // Elegant Loading Animation
-  resBox.innerHTML = `
-    <div class="flex justify-center mt-6">
-      <div class="w-10 h-10 border-4 border-gray-300 border-t-black rounded-full animate-spin"></div>
-    </div>
-  `;
-
-  try {
-    const req = await fetch(`${API_URL}?nisn=${encodeURIComponent(nisn)}`);
-    const data = await req.json();
-
-    if (data.error) {
-      resBox.innerHTML = `
-        <p class="text-center text-red-600 font-medium mt-4">
-          ${data.error}
-        </p>`;
-      return;
+    if (!nisn) {
+        resBox.innerHTML = `
+            <div class="flex items-center gap-2 p-4 bg-red-50 text-red-600 rounded-xl border border-red-100 animate-pulse">
+                <i data-lucide="alert-circle" class="w-5 h-5"></i>
+                <span class="text-sm font-medium">Silakan masukkan NISN terlebih dahulu.</span>
+            </div>`;
+        lucide.createIcons();
+        return;
     }
 
-    // RESULT CARD
     resBox.innerHTML = `
-      <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200">
-
-        <h2 class="text-xl font-semibold text-gray-900 mb-1">${data.nama}</h2>
-
-        <p class="text-gray-700"><span class="font-medium">NISN:</span> ${data.nisn}</p>
-        <p class="text-gray-700 mb-4"><span class="font-medium">Kelas:</span> ${data.kelas}</p>
-
-        <div class="flex gap-3">
-
-          <!-- VIEW -->
-          <a href="${data.link}" target="_blank"
-            class="flex-1 bg-blue-600 text-white py-3 rounded-xl flex items-center justify-center gap-2 font-semibold hover:bg-blue-700 transition">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
-              viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round"
-                d="M13.5 6H18m0 0v4.5M18 6l-6.75 6.75M8.25 6.75H6A1.5 1.5 0 0 0 4.5 8.25v9A1.5 1.5 0 0 0 6 18.75h9a1.5 1.5 0 0 0 1.5-1.5v-2.25" />
-            </svg>
-            Lihat
-          </a>
-
-          <!-- DOWNLOAD -->
-          <a href="${data.link}&export=download" target="_blank"
-            class="flex-1 bg-green-600 text-white py-3 rounded-xl flex items-center justify-center gap-2 font-semibold hover:bg-green-700 transition">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
-              viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round"
-                d="M12 3v12m0 0 4-4m-4 4-4-4M6 15h12M6 21h12" />
-            </svg>
-            Download
-          </a>
-
+        <div class="flex flex-col items-center justify-center py-6">
+            <div class="w-12 h-12 border-4 border-gray-200 border-t-blue-600 rounded-full animate-spin"></div>
+            <p class="mt-4 text-sm font-medium text-gray-500">Mencari data siswa...</p>
         </div>
-      </div>
     `;
 
-  } catch (err) {
-    resBox.innerHTML = `
-      <p class="text-center text-red-600 font-medium mt-4">
-        Terjadi kesalahan. Silakan coba lagi.
-      </p>`;
-  }
+    try {
+        const req = await fetch(`${API_URL}?nisn=${encodeURIComponent(nisn)}`);
+        const data = await req.json();
+
+        if (data.error) {
+            resBox.innerHTML = `
+                <div class="text-center p-6 bg-gray-50 rounded-2xl border border-dashed border-gray-300">
+                    <i data-lucide="user-x" class="w-10 h-10 text-gray-300 mx-auto mb-2"></i>
+                    <p class="text-gray-600 font-medium">${data.error}</p>
+                </div>`;
+            lucide.createIcons();
+            return;
+        }
+
+        // Tampilan Hasil Jika Ditemukan
+        resBox.innerHTML = `
+            <div class="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                <div class="bg-blue-50/50 p-5 rounded-2xl border border-blue-100">
+                    <div class="flex items-center gap-4 mb-3">
+                        <div class="bg-blue-600 p-2 rounded-lg text-white">
+                            <i data-lucide="user" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <p class="text-[10px] uppercase tracking-wider text-blue-500 font-bold">Nama Lengkap Siswa</p>
+                            <h3 class="text-lg font-bold text-gray-800">${data.nama}</h3>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-white p-3 rounded-xl border border-blue-50">
+                            <p class="text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-1">NISN</p>
+                            <div class="flex items-center gap-2 text-gray-700">
+                                <i data-lucide="hash" class="w-4 h-4 text-blue-400"></i>
+                                <span class="text-sm font-bold">${data.nisn}</span>
+                            </div>
+                        </div>
+                        <div class="bg-white p-3 rounded-xl border border-blue-50">
+                            <p class="text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-1">Kelas</p>
+                            <div class="flex items-center gap-2 text-gray-700">
+                                <i data-lucide="graduation-cap" class="w-4 h-4 text-blue-400"></i>
+                                <span class="text-sm font-bold">${data.kelas}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex gap-3">
+                    <a href="${data.link}" target="_blank"
+                        class="flex-1 bg-white border-2 border-gray-900 text-gray-900 py-3.5 rounded-xl flex items-center justify-center gap-2 font-bold hover:bg-gray-50 transition-all">
+                        <i data-lucide="eye" class="w-4 h-4"></i>
+                        Lihat
+                    </a>
+                    <a href="${data.link}&export=download" target="_blank"
+                        class="flex-1 bg-blue-600 text-white py-3.5 rounded-xl flex items-center justify-center gap-2 font-bold hover:bg-blue-700 shadow-lg shadow-blue-100 transition-all">
+                        <i data-lucide="download" class="w-4 h-4"></i>
+                        Unduh
+                    </a>
+                </div>
+            </div>
+        `;
+        lucide.createIcons();
+
+    } catch (err) {
+        resBox.innerHTML = `
+            <div class="p-4 bg-red-50 text-red-600 rounded-xl text-center font-medium">
+                Terjadi gangguan koneksi. Coba lagi nanti.
+            </div>`;
+    }
 }
+// Initialize Icons
+lucide.createIcons();
 </script>
 
 </body>
