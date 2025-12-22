@@ -10,39 +10,45 @@
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
-        /* Animasi Background Berubah Warna */
-        @keyframes gradient-animation {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
+    @keyframes gradient-animation {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
 
-        body {
+    body {
+        font-family: "Plus Jakarta Sans", sans-serif;
+        /* Background dibuat sedikit lebih berwarna agar efek tembus pandang kaca terlihat */
+        background: linear-gradient(-45deg, #f8faff, #e0e7ff, #f1f5f9, #dbeafe);
+        background-size: 400% 400%;
+        animation: gradient-animation 10s ease infinite;
+    }
 
-            font-family: "Plus Jakarta Sans", sans-serif;
+    .glass-card {
+        /* background transparan agar tembus pandang */
+        background: rgba(255, 255, 255, 0.65); 
+        /* efek blur latar belakang */
+        backdrop-filter: blur(16px) saturate(180%);
+        -webkit-backdrop-filter: blur(16px) saturate(180%);
+        /* border tipis seperti kilauan kaca */
+        border: 1px solid rgba(255, 255, 255, 0.7);
+        /* shadow halus agar kartu terlihat melayang */
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+    }
 
-            /* Gradasi Indigo, Violet, dan Slate yang bergerak */
+    /* Membuat header di dalam kartu juga transparan */
+    .glass-header {
+        background: rgba(255, 255, 255, 0.4) !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+    }
 
-            background: linear-gradient(-45deg, #4f46e5, #7c3aed, #4338ca, #1e1b4b);
-
-            background-size: 400% 400%;
-
-            animation: gradient-animation 15s ease infinite;
-
-        }
-
-        .glass-card {
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-        }
-
-        .input-focus-effect:focus {
-            background: white;
-            border-color: #6366f1;
-            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
-        }
-    </style>
+    .input-focus-effect:focus {
+        background: rgba(255, 255, 255, 0.9);
+        border-color: #6366f1;
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+    }
+</style>
+    
 </head>
 <body class="min-h-screen flex items-center justify-center p-6">
 
