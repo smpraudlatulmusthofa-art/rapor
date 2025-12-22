@@ -5,148 +5,118 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Cari Rapor Siswa</title>
 
-<!-- Google Fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<!-- TailwindCSS CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
 
-<style>
-body {
-  font-family: "Inter", sans-serif;
-  background: #f5f7fa;
-  padding: 20px;
-  margin: 0;
-}
-
-.container {
-  max-width: 500px;
-  margin: auto;
-}
-
-h2 {
-  text-align: center;
-  margin-bottom: 20px;
-  font-weight: 600;
-}
-
-input {
-  width: 100%;
-  padding: 14px;
-  font-size: 16px;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  margin-bottom: 12px;
-}
-
-button {
-  width: 100%;
-  padding: 14px;
-  font-size: 16px;
-  background: #2d3436;
-  color: white;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: 600;
-}
-
-button:hover {
-  background: #000;
-}
-
-.card {
-  background: white;
-  padding: 20px;
-  border-radius: 16px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-  margin-top: 20px;
-}
-
-.card h3 {
-  margin: 0 0 10px 0;
-  font-size: 20px;
-  font-weight: 600;
-}
-
-.label {
-  font-weight: 600;
-}
-
-.actions {
-  margin-top: 20px;
-  display: flex;
-  gap: 10px;
-}
-
-.actions a {
-  flex: 1;
-  text-align: center;
-  text-decoration: none;
-  padding: 12px;
-  border-radius: 8px;
-  font-weight: 600;
-}
-
-.view {
-  background: #0984e3;
-  color: white;
-}
-
-.download {
-  background: #00b894;
-  color: white;
-}
-
-#error {
-  color: red;
-  text-align: center;
-}
-</style>
+<!-- Heroicons CDN (SVG) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/heroicons@2.0.18/24/outline/style.css">
 
 </head>
-<body>
+<body class="bg-gradient-to-br from-slate-100 to-white min-h-screen p-5 font-[Poppins]">
 
-<div class="container">
+<div class="max-w-xl mx-auto">
 
-<h2>Cari Rapor Berdasarkan NISN</h2>
+  <h2 class="text-2xl font-semibold text-center mb-6 tracking-tight">
+    Cari Rapor Siswa
+  </h2>
 
-<input type="text" id="nisn" placeholder="Masukkan NISN…" />
-<button onclick="search()">Cari</button>
+  <!-- Input -->
+  <div class="flex gap-3">
+    <input
+      id="nisn"
+      type="text"
+      placeholder="Masukkan NISN…"
+      class="flex-1 px-4 py-3 rounded-xl border border-gray-300 shadow-sm focus:ring-2 focus:ring-black outline-none"
+    />
 
-<div id="result"></div>
+    <button
+      onclick="search()"
+      class="px-5 py-3 rounded-xl bg-black text-white font-semibold flex items-center gap-2 hover:bg-gray-900"
+    >
+      <svg class="w-5 h-5"><use href="#magnifying-glass-icon" /></svg>
+      Cari
+    </button>
+  </div>
+
+  <!-- Hasil -->
+  <div id="result" class="mt-6"></div>
 
 </div>
 
+<!-- Heroicons SVG Symbols -->
+<svg style="display:none;">
+  <symbol id="magnifying-glass-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+    <path stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+      d="m21 21-5.197-5.197M4.75 10.5a5.75 5.75 0 1 1 11.5 0 5.75 5.75 0 0 1-11.5 0Z" />
+  </symbol>
+
+  <symbol id="external-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+    <path stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+      d="M13.5 6H18m0 0v4.5M18 6l-6.75 6.75M8.25 6.75H6A1.5 1.5 0 0 0 4.5 8.25v9A1.5 1.5 0 0 0 6 18.75h9a1.5 1.5 0 0 0 1.5-1.5v-2.25" />
+  </symbol>
+
+  <symbol id="download-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+    <path stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+      d="M12 3v12m0 0 4-4m-4 4-4-4M6 15h12M6 21h12" />
+  </symbol>
+</svg>
+
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbx9_IzwspILFBdWL6YKG9vcco0Ay3bZE7iPaHx8lb0PCBfN6_JLx-WQHOPbu8Xzf3nBAg/exec"; // ganti
+const API_URL = "https://script.google.com/macros/s/AKfycbx9_IzwspILFBdWL6YKG9vcco0Ay3bZE7iPaHx8lb0PCBfN6_JLx-WQHOPbu8Xzf3nBAg/exec";
 
 async function search() {
   const nisn = document.getElementById("nisn").value.trim();
   const resBox = document.getElementById("result");
 
-  resBox.innerHTML = "<p>Mencari data...</p>";
+  if (!nisn) {
+    resBox.innerHTML = `<p class="text-red-600 text-center mt-2">NISN tidak boleh kosong</p>`;
+    return;
+  }
+
+  // Loading spinner
+  resBox.innerHTML = `
+    <div class="flex justify-center mt-6">
+      <div class="w-10 h-10 rounded-full border-4 border-gray-300 border-t-black animate-spin"></div>
+    </div>
+  `;
 
   try {
     const req = await fetch(`${API_URL}?nisn=${encodeURIComponent(nisn)}`);
     const data = await req.json();
 
     if (data.error) {
-      resBox.innerHTML = `<p id="error">${data.error}</p>`;
+      resBox.innerHTML = `<p class="text-red-600 text-center mt-4">${data.error}</p>`;
       return;
     }
 
     resBox.innerHTML = `
-      <div class="card">
-        <h3>${data.nama}</h3>
-        <p><span class="label">NISN:</span> ${data.nisn}</p>
-        <p><span class="label">Kelas:</span> ${data.kelas}</p>
+      <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200">
 
-        <div class="actions">
-          <a class="view" href="${data.link}" target="_blank">Lihat Rapor</a>
-          <a class="download" href="${data.link}&export=download" target="_blank">Download PDF</a>
+        <h3 class="text-xl font-semibold mb-3">${data.nama}</h3>
+
+        <p class="mb-1"><span class="font-semibold">NISN:</span> ${data.nisn}</p>
+        <p class="mb-3"><span class="font-semibold">Kelas:</span> ${data.kelas}</p>
+
+        <div class="flex gap-3 mt-5">
+
+          <a href="${data.link}" target="_blank"
+            class="flex-1 bg-blue-600 text-white rounded-xl py-3 text-center font-semibold flex items-center justify-center gap-2 hover:bg-blue-700">
+            <svg class="w-5 h-5"><use href="#external-link-icon"/></svg>
+            Lihat
+          </a>
+
+          <a href="${data.link}&export=download" target="_blank"
+            class="flex-1 bg-green-600 text-white rounded-xl py-3 text-center font-semibold flex items-center justify-center gap-2 hover:bg-green-700">
+            <svg class="w-5 h-5"><use href="#download-icon"/></svg>
+            Download
+          </a>
+
         </div>
       </div>
     `;
+
   } catch (err) {
-    resBox.innerHTML = "<p id='error'>Terjadi kesalahan. Coba lagi.</p>";
+    resBox.innerHTML = `<p class="text-red-600 text-center mt-3">Terjadi kesalahan. Coba lagi.</p>`;
   }
 }
 </script>
