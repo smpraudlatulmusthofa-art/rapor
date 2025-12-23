@@ -10,7 +10,6 @@
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
-        /* Animasi Background Berubah Warna */
         @keyframes gradient-animation {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
@@ -19,7 +18,6 @@
 
         body {
             font-family: "Plus Jakarta Sans", sans-serif;
-            /* Gradasi Indigo, Violet, dan Slate yang bergerak */
             background: linear-gradient(-45deg, #4f46e5, #7c3aed, #4338ca, #1e1b4b);
             background-size: 400% 400%;
             animation: gradient-animation 15s ease infinite;
@@ -41,9 +39,7 @@
 <body class="min-h-screen flex items-center justify-center p-6">
 
 <div class="max-w-md w-full">
-    
     <div class="glass-card shadow-[0_25px_60px_-15px_rgba(0,0,0,0.3)] rounded-[2.5rem] overflow-hidden">
-        
         <div class="p-8 text-center bg-white">
             <div class="flex justify-center mb-5">
                 <div class="relative">
@@ -60,12 +56,12 @@
         <div class="p-8 pt-2">
             <div class="relative">
                 <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-indigo-500">
-                    <i data-lucide="fingerprint" class="w-5 h-5"></i>
+                    <i data-lucide="search" class="w-5 h-5"></i>
                 </div>
                 <input
                     id="nisn"
                     type="text"
-                    placeholder="Masukkan NISN Siswa..."
+                    placeholder="Masukkan No / NISN / Nama..."
                     class="input-focus-effect w-full pl-12 pr-5 py-4 rounded-2xl border-2 border-indigo-100 bg-indigo-50/50 outline-none text-slate-700 font-bold placeholder-indigo-300 transition-all duration-300"
                 />
             </div>
@@ -75,7 +71,7 @@
                 class="w-full mt-4 bg-gradient-to-r from-indigo-600 to-violet-600 text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-3 hover:from-indigo-700 hover:to-violet-700 shadow-xl shadow-indigo-500/30 transition-all duration-300 transform active:scale-[0.97]"
             >
                 <i data-lucide="search" class="w-5 h-5"></i>
-                Cari Rapor
+                Cari Data
             </button>
 
             <div id="result" class="mt-8"></div>
@@ -88,17 +84,18 @@
 </div>
 
 <script>
+// Pastikan URL ini adalah URL Web App terbaru Anda
 const API_URL = "https://script.google.com/macros/s/AKfycbx9_IzwspILFBdWL6YKG9vcco0Ay3bZE7iPaHx8lb0PCBfN6_JLx-WQHOPbu8Xzf3nBAg/exec";
 
 async function search() {
-    const nisn = document.getElementById("nisn").value.trim();
+    const inputVal = document.getElementById("nisn").value.trim();
     const resBox = document.getElementById("result");
 
-    if (!nisn) {
+    if (!inputVal) {
         resBox.innerHTML = `
             <div class="flex items-center gap-3 p-4 bg-amber-50 text-amber-700 rounded-2xl border border-amber-100 animate-in fade-in zoom-in duration-300">
                 <i data-lucide="alert-circle" class="w-5 h-5"></i>
-                <span class="text-sm font-bold">Mohon masukkan NISN Anda</span>
+                <span class="text-sm font-bold">Mohon masukkan No/NISN/Nama</span>
             </div>`;
         lucide.createIcons();
         return;
@@ -112,7 +109,8 @@ async function search() {
     `;
 
     try {
-        const req = await fetch(`${API_URL}?nisn=${encodeURIComponent(nisn)}`);
+        // Menggunakan parameter 'q' untuk mendukung pencarian multi-kolom
+        const req = await fetch(`${API_URL}?q=${encodeURIComponent(inputVal)}`);
         const data = await req.json();
 
         if (data.error) {
@@ -127,10 +125,7 @@ async function search() {
             return;
         }
 
-        // --- LOGIKA PENGECEKAN LINK ---
         let actionButton = "";
-        
-        // Cek jika link kosong, null, atau berisi tanda "-"
         if (!data.link || data.link === "" || data.link === "-") {
             actionButton = `
                 <div class="p-5 bg-rose-50 border border-rose-100 rounded-[2rem] flex flex-col items-center text-center gap-2">
@@ -139,16 +134,14 @@ async function search() {
                         Mohon maaf sementara rapor masih belum bisa diakses.<br> 
                         <span class="text-[11px] opacity-80 font-medium">Silakan menghubungi wali kelas masing-masing.</span>
                     </p>
-                </div>
-            `;
+                </div>`;
         } else {
             actionButton = `
                 <a href="${data.link}" target="_blank"
                     class="w-full bg-gradient-to-r from-indigo-600 to-violet-600 text-white py-4 rounded-2xl flex items-center justify-center gap-3 font-bold hover:from-indigo-700 hover:to-violet-700 shadow-2xl shadow-indigo-500/40 transition-all transform active:scale-[0.98]">
                     <i data-lucide="external-link" class="w-5 h-5"></i>
                     Lihat Rapor Digital
-                </a>
-            `;
+                </a>`;
         }
 
         resBox.innerHTML = `
@@ -193,6 +186,5 @@ async function search() {
 }
 lucide.createIcons();
 </script>
-
 </body>
 </html>
